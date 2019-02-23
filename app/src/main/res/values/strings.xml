@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">moviesTest</string>
+    <string name="app_name">Movies Test</string>
+    <string name="search">buscar</string>
+    <string name="search_icon">&#xf002;</string>
 </resources>
