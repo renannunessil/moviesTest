@@ -1,5 +1,6 @@
 package br.com.renannunessil.moviestest.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.List;
 
 public class Movie {
 
+    @SerializedName("id")
+    private int id;
     @SerializedName("name")
     private String title;
     @SerializedName("summary")
@@ -14,12 +17,11 @@ public class Movie {
     @SerializedName("premiered")
     private String premiereDate;
     @SerializedName("image")
-    private List<String> poster;
+    private Images poster;
     @SerializedName("genres")
     private List<String> genre;
 
     public Movie() {
-        this.poster = new ArrayList<>();
         this.genre = new ArrayList<>();
     }
 
@@ -47,11 +49,11 @@ public class Movie {
         this.premiereDate = premiereDate;
     }
 
-    public List<String> getPoster() {
+    public Images getPoster() {
         return poster;
     }
 
-    public void setPoster(List<String> poster) {
+    public void setPoster(Images poster) {
         this.poster = poster;
     }
 
@@ -61,5 +63,41 @@ public class Movie {
 
     public void setGenre(List<String> genre) {
         this.genre = genre;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFormattedDate() {
+        String date = this.premiereDate;
+        date.replace("-", "/");
+        return date;
+    }
+
+    public String getFormattedSummary() {
+        String summary = this.summary;
+        summary = summary.replace("<p>","")
+                         .replace("<b>", "")
+                         .replace("</p>", "")
+                         .replace("</b>", "");
+
+        return summary;
+    }
+
+    public String getGenreLabel() {
+        String label = "";
+        for (int i = 0; i < genre.size(); i++) {
+            if (i != genre.size()-1) {
+                label += genre.get(i) + " / ";
+            } else {
+                label += genre.get(i);
+            }
+        }
+        return label;
     }
 }

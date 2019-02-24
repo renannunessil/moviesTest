@@ -9,7 +9,7 @@ import retrofit2.http.Query;
 
 public interface CallApi {
 
-    @GET("search")
-    Call<List<MoviesResponse>> getMovies(@Query("query") String search);
+    @GET("shows")
+    Call<List<MoviesResponse>> getMovies(@Query("q") String movieSearch);
 
 }

@@ -5,8 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class MoviesResponse {
     @SerializedName("show")
-    @Expose
-    Movie movie;
+    private Movie movie;
 
     public MoviesResponse() {
     }
