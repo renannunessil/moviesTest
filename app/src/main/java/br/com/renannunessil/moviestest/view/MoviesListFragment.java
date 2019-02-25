@@ -74,13 +74,18 @@ public class MoviesListFragment extends Fragment implements MoviesListRecyclerVi
 
     private void callMovieApi(String search, View view) {
         hideSoftKeyboard(view);
+        binding.tvNotFound.setVisibility(View.GONE);
         activity.showLoading(true);
         viewModel.getMoviesList(search).observe(this, response -> {
             activity.showLoading(false);
             if(response != null) {
-                moviesList = response;
-                setFavorites(favoriteMovies, moviesList);
-                setMoviesListAdapter(moviesList);
+                if (response.size() > 0) {
+                    moviesList = response;
+                    setFavorites(favoriteMovies, moviesList);
+                    setMoviesListAdapter(moviesList);
+                } else {
+                    binding.tvNotFound.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

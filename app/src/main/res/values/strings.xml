@@ -4,6 +4,7 @@
     <string name="genres">Genre(s):</string>
     <string name="summary">Summary:</string>
     <string name="premiere_date">Premiered:</string>
+    <string name="not_found">Desculpe, o item pesquisado não foi encontrado</string>
 
     //icons
     <string name="search_icon">&#xf002;</string>
