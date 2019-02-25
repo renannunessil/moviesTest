@@ -11,6 +11,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/search"
             android:singleLine="true"
+            android:tag="search"
             android:textColorHint="@color/colorAccent"
             android:textColor="@color/colorAccent"
             app:layout_constraintTop_toTopOf="parent"

@@ -20,17 +20,20 @@ public class MoviesListRecyclerViewAdapter extends RecyclerView.Adapter<MoviesLi
 
     private List<MoviesResponse> data;
     private MoviesListItemClickListener clickListener;
+    private Context context;
 
     public class MoviesListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView title;
         TextView genre;
+        TextView favorite;
         ImageView poster;
 
         MoviesListViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.tv_movie_label);
             genre = itemView.findViewById(R.id.tv_movie_genre);
+            favorite = itemView.findViewById(R.id.tv_favorite_icon);
             poster = itemView.findViewById(R.id.iv_movie_poster);
             itemView.setOnClickListener(this);
         }
@@ -51,7 +54,7 @@ public class MoviesListRecyclerViewAdapter extends RecyclerView.Adapter<MoviesLi
     @NonNull
     @Override
     public MoviesListViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        Context context = viewGroup.getContext();
+        context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
 
         View listItem = layoutInflater.inflate(R.layout.item_movie_list, viewGroup, false);
@@ -62,6 +65,7 @@ public class MoviesListRecyclerViewAdapter extends RecyclerView.Adapter<MoviesLi
     @Override
     public void onBindViewHolder(@NonNull MoviesListViewHolder moviesListViewHolder, int i) {
         MoviesResponse moviesResponse = data.get(i);
+
         ImageView poster = moviesListViewHolder.poster;
         if (moviesResponse.getMovie().getPoster() != null){
             Picasso.get().load(moviesResponse.getMovie().getPoster().getOriginalImage())
@@ -72,10 +76,19 @@ public class MoviesListRecyclerViewAdapter extends RecyclerView.Adapter<MoviesLi
                     .fit()
                     .into(poster);
         }
+
         TextView title = moviesListViewHolder.title;
         title.setText(moviesResponse.getMovie().getTitle());
+
         TextView genre = moviesListViewHolder.genre;
         genre.setText(moviesResponse.getMovie().getGenreLabel());
+
+        TextView favorite = moviesListViewHolder.favorite;
+        if (moviesResponse.getMovie().isFavorite()) {
+            favorite.setTextColor(context.getColor(R.color.favoriteColor));
+        } else {
+            favorite.setTextColor(context.getColor(R.color.unfavoriteColor));
+        }
     }
 
     @Override
@@ -85,6 +98,10 @@ public class MoviesListRecyclerViewAdapter extends RecyclerView.Adapter<MoviesLi
 
     public interface MoviesListItemClickListener {
         void onItemClick(View view, MoviesResponse movieResponse);
+    }
+
+    public void notifyDataChanged() {
+        notifyDataSetChanged();
     }
 
 }

@@ -59,17 +59,17 @@ public class MoviesListRepository {
     }
 
     public LiveData<List<FavoriteMovie>> getFavoriteMovies() {
-        LiveData<List<FavoriteMovie>> favoriteMovieLiveData;
-        favoriteMovieLiveData = appDataBase.movieDao.getFavoriteMovies();
+        MutableLiveData<List<FavoriteMovie>> favoriteMovieLiveData = new MutableLiveData<>();
+        favoriteMovieLiveData.setValue(appDataBase.movieDao().getFavoriteMovies());
         return favoriteMovieLiveData;
     }
 
     public void saveFavoriteMovie(FavoriteMovie favoriteMovie) {
-        appDataBase.movieDao.save(favoriteMovie);
+        appDataBase.movieDao().save(favoriteMovie);
     }
 
     public void unfavoriteMovie(FavoriteMovie favoriteMovie) {
-        appDataBase.movieDao.deleteMovie(favoriteMovie);
+        appDataBase.movieDao().deleteMovie(favoriteMovie);
     }
 
 }

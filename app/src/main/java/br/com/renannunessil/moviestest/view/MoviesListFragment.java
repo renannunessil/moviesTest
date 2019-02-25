@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v13.view.inputmethod.EditorInfoCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +23,7 @@ import java.util.List;
 import br.com.renannunessil.moviestest.R;
 import br.com.renannunessil.moviestest.adapter.MoviesListRecyclerViewAdapter;
 import br.com.renannunessil.moviestest.databinding.FragmentMoviesListBinding;
+import br.com.renannunessil.moviestest.model.FavoriteMovie;
 import br.com.renannunessil.moviestest.model.Movie;
 import br.com.renannunessil.moviestest.model.MoviesResponse;
 import br.com.renannunessil.moviestest.viewmodel.MoviesListViewModel;
@@ -36,6 +36,8 @@ public class MoviesListFragment extends Fragment implements MoviesListRecyclerVi
     private MainActivity activity;
     private RecyclerView.LayoutManager layoutManager;
     private Context context;
+    private List<FavoriteMovie> favoriteMovies = new ArrayList<>();
+    public  MoviesListRecyclerViewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class MoviesListFragment extends Fragment implements MoviesListRecyclerVi
         super.onViewCreated(view, savedInstanceState);
         activity = (MainActivity) getActivity();
         setSearchClickListener();
+        getFavorites();
         binding.etMovieSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE)
                 callMovieApi(binding.etMovieSearch.getText().toString(), v);
@@ -70,19 +73,20 @@ public class MoviesListFragment extends Fragment implements MoviesListRecyclerVi
     }
 
     private void callMovieApi(String search, View view) {
-        hideKeyboardFrom(view);
+        hideSoftKeyboard(view);
         activity.showLoading(true);
         viewModel.getMoviesList(search).observe(this, response -> {
             activity.showLoading(false);
             if(response != null) {
                 moviesList = response;
+                setFavorites(favoriteMovies, moviesList);
                 setMoviesListAdapter(moviesList);
             }
         });
     }
 
     private void setMoviesListAdapter(List<MoviesResponse> moviesList) {
-        MoviesListRecyclerViewAdapter adapter = new MoviesListRecyclerViewAdapter(moviesList, this);
+        adapter = new MoviesListRecyclerViewAdapter(moviesList, this);
         layoutManager = new LinearLayoutManager(getContext());
         binding.moviesList.setLayoutManager(layoutManager);
         binding.moviesList.setAdapter(adapter);
@@ -94,8 +98,26 @@ public class MoviesListFragment extends Fragment implements MoviesListRecyclerVi
         activity.setNextFragment(new MovieDetailsFragment());
     }
 
-    public void hideKeyboardFrom(View view) {
+    public void hideSoftKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void getFavorites() {
+        activity.showLoading(true);
+        viewModel.getFavoriteMoviesList().observe(this, response -> {
+            favoriteMovies = response;
+            activity.showLoading(false);
+        });
+    }
+
+    private void setFavorites(List<FavoriteMovie> favorites, List<MoviesResponse> moviesList) {
+        for (FavoriteMovie favorite : favorites) {
+            for (MoviesResponse movie : moviesList) {
+                if (favorite.getId() == movie.getMovie().getId()) {
+                    movie.getMovie().setFavorite(true);
+                }
+            }
+        }
     }
 }

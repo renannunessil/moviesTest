@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity implements MoviesListFragmen
 
     private FragmentManager fragmentManager;
     private Movie movie;
-    private Fragment currentFragment;
+    private MoviesListFragment moviesListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +36,10 @@ public class MainActivity extends AppCompatActivity implements MoviesListFragmen
     }
 
     public void setNextFragment(Fragment fragment) {
-        if (fragment == null) fragment = new MoviesListFragment();
-        currentFragment = fragment;
+        if (fragment == null) {
+            fragment = new MoviesListFragment();
+            moviesListFragment = (MoviesListFragment) fragment;
+        }
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.add(R.id.frame_layout, fragment);
         ft.addToBackStack("");
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MoviesListFragmen
         int count = fragmentManager.getBackStackEntryCount();
         if (count > 1) {
             super.onBackPressed();
+            moviesListFragment.adapter.notifyDataChanged();
         } else {
             moveTaskToBack(true);
         }

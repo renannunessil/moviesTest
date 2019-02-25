@@ -20,9 +20,11 @@ public class Movie {
     private Images poster;
     @SerializedName("genres")
     private List<String> genre;
+    private boolean isFavorite;
 
     public Movie() {
         this.genre = new ArrayList<>();
+        this.isFavorite = false;
     }
 
     public String getTitle() {
@@ -69,9 +71,11 @@ public class Movie {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) { this.id = id; }
+
+    public boolean isFavorite() { return isFavorite; }
+
+    public void setFavorite(boolean favorite) { isFavorite = favorite; }
 
     public String getFormattedDate() {
         String date = this.premiereDate;
@@ -99,5 +103,11 @@ public class Movie {
             }
         }
         return label;
+    }
+
+    public FavoriteMovie favoriteMovieParse() {
+        FavoriteMovie favoriteMovie = new FavoriteMovie();
+        favoriteMovie.setId(this.id);
+        return favoriteMovie;
     }
 }

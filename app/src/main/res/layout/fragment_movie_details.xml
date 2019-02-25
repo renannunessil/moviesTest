@@ -50,7 +50,7 @@
                 android:fontFamily="@font/custom_icon_font"
                 android:text="@string/heart_icon"
                 android:textSize="30sp"
-
+                android:textColor="@{movie.favorite == true ? @color/favoriteColor : @color/unfavoriteColor}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/tv_movie_title"
                 app:layout_constraintStart_toEndOf="@id/tv_movie_title"
