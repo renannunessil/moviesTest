@@ -84,6 +84,8 @@ public class MoviesListFragment extends Fragment implements MoviesListRecyclerVi
                     setFavorites(favoriteMovies, moviesList);
                     setMoviesListAdapter(moviesList);
                 } else {
+                    moviesList = new ArrayList<>();
+                    setMoviesListAdapter(moviesList);
                     binding.tvNotFound.setVisibility(View.VISIBLE);
                 }
             }
