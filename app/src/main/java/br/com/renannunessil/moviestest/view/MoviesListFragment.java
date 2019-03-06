@@ -76,6 +76,7 @@ public class MoviesListFragment extends Fragment implements MoviesListRecyclerVi
         hideSoftKeyboard(view);
         binding.tvNotFound.setVisibility(View.GONE);
         activity.showLoading(true);
+        getFavorites();
         viewModel.getMoviesList(search).observe(this, response -> {
             activity.showLoading(false);
             if(response != null) {
